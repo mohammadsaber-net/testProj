@@ -81,25 +81,26 @@ export default function MainData (){
 // };
 const getData = async () => {
   try {
-    const url = `https://pokeapi.co/api/v2/pokemon/?limit=20&offset=${page * 20}`;
-    
-    const res = await fetch(url, {
-      method: 'GET',
-      mode: 'cors',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (!res.ok) throw new Error("Status: " + res.status);
+    const res = await fetch(
+  `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page * 20}`,
+    { cache: "no-store" }
+  );
+    if (!res.ok) {
+      toast.error(`Failed to load data: ${res.status} ${res.statusText}`);
+      return;
+    };
 
     const result = await res.json();
     
     if (result && result.results) {
        setData(result);
+       toast.success("Data loaded successfully!");
+       setNextData(!!result.next);
+     } else {
+       toast.error("Data loaded but no results found!");
     }
   } catch (err) {
+    toast.error(`An error occurred while loading data: ${(err as Error).message}`);
     // لو لسه "Load failed" بتظهر، يبقى المتصفح حظر الطلب قبل ما يخرج من الجهاز أصلاً
     alert("Detail: " + (err as Error).message + " | URL: " + page);
   }
