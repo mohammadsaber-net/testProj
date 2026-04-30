@@ -16,6 +16,7 @@ export default function MainData (){
         const res = await fetch("/api/pokemon",
         { cache: "no-store" });
         const data = await res.json();
+        console.log("all pokemon", data.data);
         setAllPokemon(data.data.results);
     } catch (error) {
         toast.error("Failed to load search data");
