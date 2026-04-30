@@ -65,8 +65,9 @@ export default function MainData (){
     }
 
     const jsonResult = await res.json(); // تغيير الاسم هنا مهم جداً
-
+    alert(`Data before if! ${JSON.stringify(jsonResult)}`); // تنبيه للموبايل
     if (jsonResult && jsonResult.results) {
+      alert(`Data after if! ${JSON.stringify(jsonResult)}`); // تنبيه للموبايل
       setData(jsonResult);
       setNextData(!!jsonResult.next);
     } else {
