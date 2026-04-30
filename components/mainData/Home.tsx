@@ -3,40 +3,40 @@ import { useEffect, useState } from "react";
 import ShowPokemon from "./ShowPokemon";
 import toast from "react-hot-toast";
 export default function MainData (){
-    const [allPokemon, setAllPokemon] = useState<any>(null);
+  //   const [allPokemon, setAllPokemon] = useState<any>(null);
     const [data, setData] = useState<any>(null);
-    const [dataType, setDataType] = useState<any>(null);
-    const [search, setSearch] = useState("")
+    // const [dataType, setDataType] = useState<any>(null);
+  //   const [search, setSearch] = useState("")
     const [loading,setLoading]=useState(true)
-    const [searchLoading, setSearchLoading] = useState(false);
+  //   const [searchLoading, setSearchLoading] = useState(false);
     const [page, setPage] = useState(0);
     const [nextData, setNextData] = useState(true)
-    const getAllPokemon = async () => {
-    if (allPokemon || searchLoading) return;
-    setSearchLoading(true);
-    try {
-        const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1000",
-        { cache: "no-store" });
-        const data = await res.json();
-        setAllPokemon(data.results);
-    } catch (error) {
-        toast.error("Failed to load search data");
-    } finally {
-        setSearchLoading(false);    
-    }
-  };
-    const getPokemonByType = async (type:string) => {
-      if(!type){
-        setDataType(null)
-        return
-      }
-      const res = await fetch(
-        `https://pokeapi.co/api/v2/type/${type}`,
-        { cache: "no-store" }
-      );
-      const data = await res.json();
-      setDataType(data.pokemon.map((p: any) => p.pokemon));
-    };
+  //   const getAllPokemon = async () => {
+  //   if (allPokemon || searchLoading) return;
+  //   setSearchLoading(true);
+  //   try {
+  //       const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1000",
+  //       { cache: "no-store" });
+  //       const data = await res.json();
+  //       setAllPokemon(data.results);
+  //   } catch (error) {
+  //       toast.error("Failed to load search data");
+  //   } finally {
+  //       setSearchLoading(false);    
+  //   }
+  // };
+  //   const getPokemonByType = async (type:string) => {
+  //     if(!type){
+  //       setDataType(null)
+  //       return
+  //     }
+  //     const res = await fetch(
+  //       `https://pokeapi.co/api/v2/type/${type}`,
+  //       { cache: "no-store" }
+  //     );
+  //     const data = await res.json();
+  //     setDataType(data.pokemon.map((p: any) => p.pokemon));
+  //   };
     const getData = async () => {
       try {
         setLoading(true);
@@ -56,11 +56,11 @@ export default function MainData (){
     useEffect(()=>{
         getData()
     },[page])
-  const renderedData = search
-      ?allPokemon?.filter((pokemon: any) => pokemon.name.toLowerCase().includes(search))
-      :dataType 
-      ?dataType 
-      :data?.results
+  // const renderedData = search
+  //     ?allPokemon?.filter((pokemon: any) => pokemon.name.toLowerCase().includes(search))
+  //     :dataType 
+  //     ?dataType 
+  //     :data?.results
   return loading?(
   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
   {[...Array(20)].map((_, i) => (
@@ -74,7 +74,7 @@ export default function MainData (){
   ))}</section>
   ):(
   <>
-  <div className="my-2 flex justify-between gap-4 flex-col md:flex-row md:items-center">
+  {/* <div className="my-2 flex justify-between gap-4 flex-col md:flex-row md:items-center">
     <select
       onChange={(e) => getPokemonByType(e.target.value)}
       className="mb-4 p-2.5 border border-gray-300 rounded w-full text-indigo-600 outline-none text-base"
@@ -92,9 +92,9 @@ export default function MainData (){
     className="mb-4 p-2 border border-gray-300 rounded w-full text-indigo-600 outline-none text-base"
     onChange={(e)=> setSearch(e.target.value.toLowerCase())}
     />
-  </div>
+  </div> */}
   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-    {renderedData?.map((pokemon: any) => {
+    {data?.results?.map((pokemon: any) => {
       if (!pokemon?.url || !pokemon?.name) return null;
       const id = pokemon.url.split("/").filter(Boolean).pop();
       const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;

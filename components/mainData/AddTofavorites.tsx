@@ -25,6 +25,10 @@ export default function AddTofavorites({ pokemon }: Props) {
     }, [checkIsFavorite])
 
     const handleFavorites = (pokemon: { name: string, image: string }) => {
+        if (status === "loading") {
+            toast.error("Checking authentication status, please try again...")
+            return
+        }
         if (status === "unauthenticated") {
             toast.error("You must be logged in to add favorites!")
             return
