@@ -7,7 +7,7 @@ export default function MainData (){
     const [data, setData] = useState<any>(null);
     // const [dataType, setDataType] = useState<any>(null);
   //   const [search, setSearch] = useState("")
-    const [loading,setLoading]=useState(true)
+    // const [loading,setLoading]=useState(true)
   //   const [searchLoading, setSearchLoading] = useState(false);
     const [page, setPage] = useState(0);
     const [nextData, setNextData] = useState(true)
@@ -39,7 +39,7 @@ export default function MainData (){
   //   };
     const getData = async () => {
       try {
-        setLoading(true);
+        // setLoading(true);
         const res = await fetch(
           `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page * 20}`
         );
@@ -50,31 +50,32 @@ export default function MainData (){
       } catch (err) {
         console.error("Fetch error:", err);
       } finally {
-        setLoading(false);
+        // setLoading(false);
       }
     };
     useEffect(()=>{
         getData()
     },[page])
+    return (
   // const renderedData = search
   //     ?allPokemon?.filter((pokemon: any) => pokemon.name.toLowerCase().includes(search))
   //     :dataType 
   //     ?dataType 
   //     :data?.results
-  return loading?(
-  <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-  {[...Array(20)].map((_, i) => (
-    <div
-      key={i}
-      className="rounded-xl p-4 shadow-md animate-pulse bg-white"
-    >
-      <div className="w-full h-32 bg-gray-200 rounded-lg mb-4" />
-      <div className="h-4 w-2/3 bg-gray-200 rounded mb-2" />
-    </div>
-  ))}</section>
-  ):(
+  // return loading?(
+  // <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+  // {[...Array(20)].map((_, i) => (
+  //   <div
+  //     key={i}
+  //     className="rounded-xl p-4 shadow-md animate-pulse bg-white"
+  //   >
+  //     <div className="w-full h-32 bg-gray-200 rounded-lg mb-4" />
+  //     <div className="h-4 w-2/3 bg-gray-200 rounded mb-2" />
+  //   </div>
+  // ))}</section>
+  // ):(
   <>
-  {/* <div className="my-2 flex justify-between gap-4 flex-col md:flex-row md:items-center">
+  {/* /* <div className="my-2 flex justify-between gap-4 flex-col md:flex-row md:items-center">
     <select
       onChange={(e) => getPokemonByType(e.target.value)}
       className="mb-4 p-2.5 border border-gray-300 rounded w-full text-indigo-600 outline-none text-base"
@@ -93,12 +94,16 @@ export default function MainData (){
     onChange={(e)=> setSearch(e.target.value.toLowerCase())}
     />
   </div> */}
+  
   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
     {data?.results?.map((pokemon: any) => {
-      if (!pokemon?.url || !pokemon?.name) return null;
-      const id = pokemon.url.split("/").filter(Boolean).pop();
-      const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
-      return(<ShowPokemon key={pokemon.name} pokemon={pokemon} image={image} />)
+      return (<div key={pokemon.name}>
+        {pokemon.name}
+      </div>)
+      // if (!pokemon?.url || !pokemon?.name) return null;
+      // const id = pokemon.url.split("/").filter(Boolean).pop();
+      // const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+      // return(<ShowPokemon key={pokemon.name} pokemon={pokemon} image={image} />)
     })}
     </section>
     <div className="flex justify-center items-center gap-4 mt-6">
@@ -106,7 +111,7 @@ export default function MainData (){
           onClick={() => {setPage((prev) => prev - 1);
             window.scrollTo({ top: 0, behavior: "smooth" })
           }}
-          disabled={page === 0 || loading}
+          // disabled={page === 0 || loading}
           className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
         >
           Previous
@@ -116,7 +121,7 @@ export default function MainData (){
           onClick={() => {setPage((prev) => prev + 1);
             window.scrollTo({ top: 0, behavior: "smooth" })
           }}
-          disabled={!nextData || loading}
+          // disabled={!nextData || loading}
           className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
         >
           Next
