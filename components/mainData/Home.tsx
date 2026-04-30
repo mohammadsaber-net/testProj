@@ -53,8 +53,17 @@ const getData=  async () => {
   useEffect(()=>{
     getData()
   },[page])
-  const dataToBeRendeded = search ?allPokemon?.filter((pokemon: any) => pokemon.name.toLowerCase().includes(search)):dataType ?dataType :data
+  const [dataToBeRendeded, setDataToBeRendeded] = useState<any>(null);
+  useEffect(()=>{
+     if(search) {
+      setDataToBeRendeded(allPokemon?.filter((pokemon: any) => pokemon.name.toLowerCase().includes(search)));
+    } else if (dataType) {
+      setDataToBeRendeded(dataType);
+    } else {
+      setDataToBeRendeded(data);
+    }
     console.log("dataToBeRendeded", dataToBeRendeded);
+  },[search, dataType, data, allPokemon])
   return loading?(
   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
   {[...Array(20)].map((_, i) => (
