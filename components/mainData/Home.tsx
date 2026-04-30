@@ -22,6 +22,9 @@ export default function MainData (){
         toast.error("Failed to load search data");
     }
   };
+  useEffect(() => {
+    getAllPokemon();
+  }, []);
   const getPokemonByType = async (type: string) => {
     if (!type) {
       setDataType(null);
@@ -53,16 +56,16 @@ const getData=  async () => {
   useEffect(()=>{
     getData()
   },[page])
-  const [dataToBeRendeded, setDataToBeRendeded] = useState<any>(null);
+  const [dataToBeRendered, setDataToBeRendered] = useState<any[]>([]);
   useEffect(()=>{
      if(search) {
-      setDataToBeRendeded(allPokemon?.filter((pokemon: any) => pokemon.name.toLowerCase().includes(search)));
+      setDataToBeRendered(allPokemon?.filter((pokemon: any) => pokemon.name.toLowerCase().includes(search)));
     } else if (dataType) {
-      setDataToBeRendeded(dataType);
+      setDataToBeRendered(dataType||[]);
     } else {
-      setDataToBeRendeded(data);
+      setDataToBeRendered(data||[]);
     }
-    console.log("dataToBeRendeded", dataToBeRendeded);
+    console.log("dataToBeRendered", dataToBeRendered);
   },[search, dataType, data, allPokemon])
   return loading?(
   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
@@ -90,14 +93,13 @@ const getData=  async () => {
     <input 
     type="text"
     value={search}
-    onFocus={getAllPokemon}
     placeholder="search by name"
     className="mb-4 p-2 border border-gray-300 rounded w-full text-indigo-600 outline-none text-base"
     onChange={(e)=> setSearch(e.target.value.toLowerCase())}
     />
   </div>
   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-    {dataToBeRendeded?.map((pokemon: any) => {
+    {dataToBeRendered?.map((pokemon: any) => {
       if (!pokemon?.url || !pokemon?.name) return null;
        const id = pokemon.url.split("/").filter(Boolean).pop(); 
        const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; 
