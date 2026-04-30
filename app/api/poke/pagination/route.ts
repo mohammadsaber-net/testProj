@@ -8,22 +8,21 @@ export async function GET(req: NextRequest) {
     const offset = searchParams.get("offset") || "0";
 
     const res = await fetch(
-      `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
+      `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`,
+      { cache: "no-store" }
     );
 
     if (!res.ok) {
       return NextResponse.json(
-        { error: "PokéAPI failed", status: res.status },
+        { success: false, status: res.status },
         { status: res.status }
       );
     }
-
     const data = await res.json();
-
-    return NextResponse.json(data);
+    return NextResponse.json({ success: true, data });
   } catch (e) {
     return NextResponse.json(
-      { error: "Server error", message: String(e) },
+      { success: false, message: (e as Error).message },
       { status: 500 }
     );
   }

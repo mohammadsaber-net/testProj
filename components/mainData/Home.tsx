@@ -18,7 +18,7 @@ export default function MainData (){
         const res = await fetch("/api/poke/allPokemon",
         { cache: "no-store" });
         const data = await res.json();
-        setAllPokemon(data.results);
+        setAllPokemon(data.data.results);
     } catch (error) {
         toast.error("Failed to load search data");
     } finally {
@@ -34,7 +34,7 @@ export default function MainData (){
       cache: "no-store",
     });
     const data = await res.json();
-    setDataType(data);
+    setDataType(data.data);
   };
 const getData=  async () => {
   try {
@@ -44,8 +44,8 @@ const getData=  async () => {
       toast.error(`HTTP error! status: ${res.status}`);
     }
     const data= await res.json();
-    setData(data);
-    setNextData(!!data.next);
+    setData(data.data);
+    setNextData(!!data.data.next);
   } catch (err) {
     toast.error(`An error occurred while loading data: ${(err as Error).message}`);
   }
@@ -58,7 +58,7 @@ const getData=  async () => {
     ?allPokemon?.filter((pokemon: any) => pokemon.name.toLowerCase().includes(search))
     :dataType 
     ?dataType 
-    :data?.results
+    :data.results
   return loading?(
   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
   {[...Array(20)].map((_, i) => (
@@ -92,7 +92,7 @@ const getData=  async () => {
     />
   </div>
   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-    {renderedData?.results?.map((pokemon: any) => {
+    {renderedData?.map((pokemon: any) => {
       if (!pokemon?.url || !pokemon?.name) return null;
        const id = pokemon.url.split("/").filter(Boolean).pop(); 
        const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; 
