@@ -41,7 +41,7 @@ export default function MainData (){
       try {
         // setLoading(true);
         const res = await fetch(
-          `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page * 20}`
+          `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page * 20}`,{ cache: "no-store" }
         );
         if (!res.ok) throw new Error("Request failed");
         const data = await res.json();
@@ -53,9 +53,18 @@ export default function MainData (){
         // setLoading(false);
       }
     };
-    useEffect(()=>{
-        getData()
-    },[page])
+    // أضف حالة بسيطة للتأكد أن الكود وصل لمرحلة الـ Client
+const [isClient, setIsClient] = useState(false);
+
+useEffect(() => {
+    setIsClient(true);
+    getData();
+}, [page]);
+
+if (!isClient) return <div>Loading...</div>;
+    // useEffect(()=>{
+    //     getData()
+    // },[page])
     return (
   // const renderedData = search
   //     ?allPokemon?.filter((pokemon: any) => pokemon.name.toLowerCase().includes(search))
@@ -96,15 +105,14 @@ export default function MainData (){
   </div> */}
   
   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-    {data?.results?.map((pokemon: any) => {
-      return (<div key={pokemon.name}>
-        {pokemon.name}
-      </div>)
-      // if (!pokemon?.url || !pokemon?.name) return null;
-      // const id = pokemon.url.split("/").filter(Boolean).pop();
-      // const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
-      // return(<ShowPokemon key={pokemon.name} pokemon={pokemon} image={image} />)
-    })}
+    {data && data.results && data.results.map((pokemon: any) => (
+   <div key={pokemon.name}>{pokemon.name}</div>
+    ))}
+      {/* // if (!pokemon?.url || !pokemon?.name) return null; */}
+      {/* // const id = pokemon.url.split("/").filter(Boolean).pop(); */}
+      {/* // const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; */}
+      {/* // return(<ShowPokemon key={pokemon.name} pokemon={pokemon} image={image} />) */}
+    {/* })} */}
     </section>
     <div className="flex justify-center items-center gap-4 mt-6">
         <button
