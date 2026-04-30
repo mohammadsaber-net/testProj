@@ -1,11 +1,12 @@
 import { NextRequest,NextResponse } from "next/server";
 export async function GET(
   req: NextRequest,
-  { params }: { params: { name: string } }
+  { params }: { params: Promise<{ name: string; }> }
 ) {
   try {
+    const {name} = await params;
     const res = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${params.name}`,
+      `https://pokeapi.co/api/v2/pokemon/${name}`,
       { cache: "no-store" }
     );
     if (!res.ok) {

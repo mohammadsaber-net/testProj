@@ -3,11 +3,12 @@ import { NextRequest,NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { type: string } }
+  { params }: { params: Promise<{ type: string; }> }
 ) {
   try {
+    const { type } = await params
     const res = await fetch(
-      `https://pokeapi.co/api/v2/type/${params.type}`,
+      `https://pokeapi.co/api/v2/type/${type}`,
       { cache: "no-store" }
     );
     if (!res.ok) {
