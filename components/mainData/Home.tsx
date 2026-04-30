@@ -76,7 +76,7 @@ export default function MainData (){
 
   } catch (err) {
     // الأيفون والهواوي هيطلعوا رسالة هنا لو فيه مشكلة في الـ Network أو الـ SSL
-    alert("Fetch error logic: " + (err as Error).message); 
+    alert("Fetch error logic: " + err ); 
   }
 };
     // أضف حالة بسيطة للتأكد أن الكود وصل لمرحلة الـ Client
