@@ -53,30 +53,55 @@ export default function MainData (){
     //     // setLoading(false);
     //   }
     // };
-    const getData = async () => {
+//     const getData = async () => {
+//   try {
+//     const res = await fetch(
+//       `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page * 20}`,
+//       { cache: "no-store" }
+//     );
+
+//     if (!res.ok) {
+//       throw new Error(`HTTP error! status: ${res.status}`);
+//     }
+
+//     const jsonResult = await res.json(); // تغيير الاسم هنا مهم جداً
+//     alert(`Data before if! ${JSON.stringify(jsonResult)}`); // تنبيه للموبايل
+//     if (jsonResult && jsonResult.results) {
+//       alert(`Data after if! ${JSON.stringify(jsonResult)}`); // تنبيه للموبايل
+//       setData(jsonResult);
+//       setNextData(!!jsonResult.next);
+//     } else {
+//       alert("البيانات وصلت بس مفيش results!"); // تنبيه للموبايل
+//     }
+
+//   } catch (err) {
+//     // الأيفون والهواوي هيطلعوا رسالة هنا لو فيه مشكلة في الـ Network أو الـ SSL
+//     alert("Fetch error logic: " + err ); 
+//   }
+// };
+const getData = async () => {
   try {
-    const res = await fetch(
-      `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page * 20}`,
-      { cache: "no-store" }
-    );
+    const url = `https://pokeapi.co/api/v2/pokemon/?limit=20&offset=${page * 20}`;
+    
+    const res = await fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
 
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
+    if (!res.ok) throw new Error("Status: " + res.status);
+
+    const result = await res.json();
+    
+    if (result && result.results) {
+       setData(result);
     }
-
-    const jsonResult = await res.json(); // تغيير الاسم هنا مهم جداً
-    alert(`Data before if! ${JSON.stringify(jsonResult)}`); // تنبيه للموبايل
-    if (jsonResult && jsonResult.results) {
-      alert(`Data after if! ${JSON.stringify(jsonResult)}`); // تنبيه للموبايل
-      setData(jsonResult);
-      setNextData(!!jsonResult.next);
-    } else {
-      alert("البيانات وصلت بس مفيش results!"); // تنبيه للموبايل
-    }
-
   } catch (err) {
-    // الأيفون والهواوي هيطلعوا رسالة هنا لو فيه مشكلة في الـ Network أو الـ SSL
-    alert("Fetch error logic: " + err ); 
+    // لو لسه "Load failed" بتظهر، يبقى المتصفح حظر الطلب قبل ما يخرج من الجهاز أصلاً
+    alert("Detail: " + (err as Error).message + " | URL: " + page);
   }
 };
     // أضف حالة بسيطة للتأكد أن الكود وصل لمرحلة الـ Client
