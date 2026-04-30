@@ -13,7 +13,7 @@ export default function MainData (){
     const getAllPokemon = async () => {
     if (allPokemon) return;
     try {
-        const res = await fetch("/api/poke/allpokemon",
+        const res = await fetch("/api/pokemon",
         { cache: "no-store" });
         const data = await res.json();
         setAllPokemon(data.data.results);
@@ -26,7 +26,7 @@ export default function MainData (){
       setDataType(null);
       return;
     }
-    const res = await fetch(`/api/poke/type/${type}`, {
+    const res = await fetch(`/api/pokemon/${type}`, {
       cache: "no-store",
     });
     const data = await res.json();
@@ -35,7 +35,7 @@ export default function MainData (){
 const getData=  async () => {
   try {
     setLoading(true);
-    const res = await fetch(`/api/poke/pagination?limit=20&offset=${page * 20}`, {
+    const res = await fetch(`/api/pagination?limit=20&offset=${page * 20}`, {
        cache: "no-store" ,
       });
     if (!res.ok) {

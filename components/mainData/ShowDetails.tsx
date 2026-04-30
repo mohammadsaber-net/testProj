@@ -11,7 +11,7 @@ export default function ShowDetails({openDetails,setOpenDetails}:Props) {
     useEffect(() => {
       if (!openDetails) return;
       const getData = async () => {
-        const res = await fetch(`/api/poke/pagination/${openDetails}`, {
+        const res = await fetch(`/api/pagination/${openDetails}`, {
           cache: "no-store",
         });
         const data = await res.json();
