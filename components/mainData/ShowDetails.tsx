@@ -8,17 +8,17 @@ type Props={
 }
 export default function ShowDetails({openDetails,setOpenDetails}:Props) {
     const [details,setDetails]=useState<any|null>(null)
-    useEffect(()=>{
-        if (!openDetails) return;
-        const getData = async () => {
-            const res = await fetch(
-            `https://pokeapi.co/api/v2/pokemon/${openDetails}`
-            );
-            const data = await res.json();
-            setDetails(data);
-        };
-        getData();
-    }, [openDetails]);
+    useEffect(() => {
+      if (!openDetails) return;
+      const getData = async () => {
+        const res = await fetch(`/api/poke/pagination/${openDetails}`, {
+          cache: "no-store",
+        });
+        const data = await res.json();
+        setDetails(data);
+      };
+      getData();
+}, [openDetails]);
   return  (
     <div
     onClick={()=>{setOpenDetails(null);setDetails(null)}}
