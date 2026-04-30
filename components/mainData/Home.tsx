@@ -37,22 +37,47 @@ export default function MainData (){
   //     const data = await res.json();
   //     setDataType(data.pokemon.map((p: any) => p.pokemon));
   //   };
+    // const getData = async () => {
+    //   try {
+    //     // setLoading(true);
+    //     const res = await fetch(
+    //       `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page * 20}`,{ cache: "no-store" }
+    //     );
+    //     if (!res.ok) throw new Error("Request failed");
+    //     const data = await res.json();
+    //     setData(data);
+    //     setNextData(!!data.next);
+    //   } catch (err) {
+    //     console.error("Fetch error:", err);
+    //   } finally {
+    //     // setLoading(false);
+    //   }
+    // };
     const getData = async () => {
-      try {
-        // setLoading(true);
-        const res = await fetch(
-          `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page * 20}`,{ cache: "no-store" }
-        );
-        if (!res.ok) throw new Error("Request failed");
-        const data = await res.json();
-        setData(data);
-        setNextData(!!data.next);
-      } catch (err) {
-        console.error("Fetch error:", err);
-      } finally {
-        // setLoading(false);
-      }
-    };
+  try {
+    const res = await fetch(
+      `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page * 20}`,
+      { cache: "no-store" }
+    );
+
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+
+    const jsonResult = await res.json(); // تغيير الاسم هنا مهم جداً
+
+    if (jsonResult && jsonResult.results) {
+      setData(jsonResult);
+      setNextData(!!jsonResult.next);
+    } else {
+      alert("البيانات وصلت بس مفيش results!"); // تنبيه للموبايل
+    }
+
+  } catch (err) {
+    // الأيفون والهواوي هيطلعوا رسالة هنا لو فيه مشكلة في الـ Network أو الـ SSL
+    alert("Fetch error logic: " + (err as Error).message); 
+  }
+};
     // أضف حالة بسيطة للتأكد أن الكود وصل لمرحلة الـ Client
 const [isClient, setIsClient] = useState(false);
 
@@ -61,7 +86,7 @@ useEffect(() => {
     getData();
 }, [page]);
 
-if (!isClient) return <div>Loading...</div>;
+if (!isClient) return <div className="text-blue-600">Loading...</div>;
     // useEffect(()=>{
     //     getData()
     // },[page])
