@@ -8,21 +8,17 @@ export default function MainData (){
     const [dataType, setDataType] = useState<any>(null);
     const [search, setSearch] = useState("")
     const [loading,setLoading]=useState(true)
-    const [searchLoading, setSearchLoading] = useState(false);
     const [page, setPage] = useState(0);
     const [nextData, setNextData] = useState(true)
     const getAllPokemon = async () => {
-    if (allPokemon || searchLoading) return;
-    setSearchLoading(true);
+    if (allPokemon) return;
     try {
-        const res = await fetch("/api/poke/allPokemon",
+        const res = await fetch("/api/poke/allpokemon",
         { cache: "no-store" });
         const data = await res.json();
         setAllPokemon(data.data.results);
     } catch (error) {
         toast.error("Failed to load search data");
-    } finally {
-        setSearchLoading(false);    
     }
   };
   const getPokemonByType = async (type: string) => {
@@ -56,11 +52,7 @@ const getData=  async () => {
   useEffect(()=>{
     getData()
   },[page])
-  const dataToBeRendeded = search
-    ?allPokemon?.filter((pokemon: any) => pokemon.name.toLowerCase().includes(search))
-    :dataType 
-    ?dataType 
-    :data
+  const dataToBeRendeded = search ?allPokemon?.filter((pokemon: any) => pokemon.name.toLowerCase().includes(search)):dataType ?dataType :data
     console.log("dataToBeRendeded", dataToBeRendeded);
   return loading?(
   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
