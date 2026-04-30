@@ -44,7 +44,7 @@ const getData=  async () => {
       toast.error(`HTTP error! status: ${res.status}`);
     }
     const data= await res.json();
-    setData(data.data);
+    setData(data.data.results);
     setNextData(!!data.data.next);
   } catch (err) {
     toast.error(`An error occurred while loading data: ${(err as Error).message}`);
@@ -59,6 +59,7 @@ const getData=  async () => {
     :dataType 
     ?dataType 
     :data
+    console.log("dataToBeRendeded", dataToBeRendeded);
   return loading?(
   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
   {[...Array(20)].map((_, i) => (
