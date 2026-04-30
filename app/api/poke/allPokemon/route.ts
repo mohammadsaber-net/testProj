@@ -1,11 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req:NextRequest) {
   try {
     const res = await fetch(
-      `https://pokeapi.co/api/v2/pokemon?limit=1000`,{ cache: "no-store" }
+      `https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0`,{ cache: "no-store" }
     );
-
     if (!res.ok) {
       return NextResponse.json(
         { success: false, status: res.status },

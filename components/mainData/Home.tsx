@@ -39,7 +39,9 @@ export default function MainData (){
 const getData=  async () => {
   try {
     setLoading(true);
-    const res = await fetch(`/api/poke/pagination?limit=20&offset=${page * 20}`, { cache: "no-store" });
+    const res = await fetch(`/api/poke/pagination?limit=20&offset=${page * 20}`, {
+       cache: "no-store" ,
+      });
     if (!res.ok) {
       toast.error(`HTTP error! status: ${res.status}`);
     }
@@ -52,8 +54,8 @@ const getData=  async () => {
   setLoading(false);
 }
   useEffect(()=>{
-  getData()
-  },[])
+    getData()
+  },[page])
   const dataToBeRendeded = search
     ?allPokemon?.filter((pokemon: any) => pokemon.name.toLowerCase().includes(search))
     :dataType 

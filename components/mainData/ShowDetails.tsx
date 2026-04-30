@@ -15,7 +15,7 @@ export default function ShowDetails({openDetails,setOpenDetails}:Props) {
           cache: "no-store",
         });
         const data = await res.json();
-        setDetails(data);
+        setDetails(data.data);
       };
       getData();
 }, [openDetails]);
