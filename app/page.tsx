@@ -8,7 +8,7 @@ export default function Home() {
         <h1 className="text-2xl text-black font-semibold md:text-3xl">
           Welcome to PokeDex
         </h1>
-        <MainData />;
+        <MainData />
       </div>
     </main>
   );
