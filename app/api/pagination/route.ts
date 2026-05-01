@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
     const limit = searchParams.get("limit") || "20";
     const offset = searchParams.get("offset") || "0";
     const res = await fetch(
-      `https://api.allorigins.win/raw?url=https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
+      `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
     );
     const data = await res.json();
     return NextResponse.json({ success: true, data });
