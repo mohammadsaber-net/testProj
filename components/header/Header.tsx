@@ -5,6 +5,8 @@ import Link from 'next/link'
 import {useState,useEffect} from 'react'
 import Login from "./Login";
 import Mobile from "./Mobile";
+import SearchPokemon from "../mainData/search";
+import ShowDetails from "../mainData/ShowDetails";
 export default function Header() {
   const [favoritesCount, setFavoritesCount] = useState(0);
   const [login, setLogin] = useState(false);
@@ -25,7 +27,8 @@ export default function Header() {
       <Link href='/' className='font-bold text-xl md:text-2xl'>
         PokeDex
       </Link>
-      <nav className='md:flex hidden gap-4'>
+      <nav className='md:flex items-center hidden gap-4'>
+        {/*  */}
         <Link href={"/"} className='mx-2 hover:underline'>
           Home
         </Link>
@@ -47,9 +50,11 @@ export default function Header() {
           Login
           <LogInIcon className="inline-block ms-1"/>
         </div>}
+        <SearchPokemon />
       </nav>
       <Mobile setLogin={setLogin} favoritesCount={favoritesCount} />
       <Login login={login} setLogin={setLogin} />
+      {/* <div className="hidden md-block"><SearchPokemon /></div> */}
     </header>
   )
 }

@@ -2,29 +2,45 @@
 import { useEffect, useState } from "react";
 import ShowPokemon from "./ShowPokemon";
 import toast from "react-hot-toast";
+import { X } from "lucide-react";
+import SearchPokemon from "./search";
 export default function MainData (){
-    const [allPokemon, setAllPokemon] = useState<any>(null);
+    // const [allPokemon, setAllPokemon] = useState<any>(null);
+    const [searched, setSearched] = useState<any>(null);
     const [data, setData] = useState<any>(null);
     const [dataType, setDataType] = useState<any>(null);
     const [search, setSearch] = useState("")
     const [loading,setLoading]=useState(true)
     const [page, setPage] = useState(0);
     const [nextData, setNextData] = useState(true)
-    const getAllPokemon = async () => {
-    if (allPokemon) return;
+    const getAllPokemon = async (name:string) => {
+    // if (allPokemon) return;
     try {
-        let res = await fetch("/api/pokemon",
-        { cache: "no-store" });
+       let res = await fetch(`/api/pagination/${name}`, {
+          cache: "no-store",
+        });
         let data = await res.json();
-        if(!res.ok || !data.success) {
-          res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1000", {
+        if(!res.ok) {
+           res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`, {
             cache: "no-store",
           });
           data = await res.json();
           data={data}
         }
-        console.log("all pokemon", data)
-        setAllPokemon(data.data.results);
+        // let res = await fetch("/api/pokemon",
+        // { cache: "no-store" });
+        // let data = await res.json();
+        // if(!res.ok || !data.success) {
+        //   // res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1000", {
+        //   res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`,{  
+        //   cache: "no-store",
+        //   });
+        //   data = await res.json();
+        //   data={data}
+        // }
+        // console.log("all pokemon", data)
+        setSearched(data.data);
+        // setAllPokemon(data.data.results);
     } catch (error) {
         toast.error("Failed to load search data");
     }
@@ -74,16 +90,17 @@ const getData=  async () => {
   useEffect(()=>{
     getData()
   },[page])
-  useEffect(() => {
-    getAllPokemon();
-  }, []);
+  // useEffect(() => {
+  //   getAllPokemon();
+  // }, []);
   const dataToBeRendered=()=>{
-     if(search) {
-      return allPokemon?.filter(
-        (pokemon: any) => 
-          pokemon.name.toLowerCase().includes(search.toLowerCase()) 
-        || []);
-    } else if (dataType) {
+    // if(search) {
+    //   return allPokemon?.filter(
+    //     (pokemon: any) => 
+    //       pokemon.name.toLowerCase().includes(search.toLowerCase()) 
+    //     || []);
+    // } else  
+    if (dataType) {
       return dataType||[];
     } else {
       return data||[];
@@ -112,13 +129,35 @@ const getData=  async () => {
       <option value="Water">Water</option>
       <option value="Grass">Grass</option>
     </select>
-    <input 
-    type="text"
-    value={search}
-    placeholder="search by name"
-    className="mb-4 p-2 border border-gray-300 rounded w-full text-indigo-600 outline-none text-base"
-    onChange={(e)=> setSearch(e.target.value)}
-    />
+    {/* <SearchPokemon /> */}
+    {/* <div>
+      <div  className="flex items-center gap-2 relative">
+        <input 
+        type="text"
+        value={search}
+        placeholder="search by name"
+        className=" p-2 border border-gray-300 rounded w-full text-indigo-600 outline-none text-base"
+        onChange={(e)=> setSearch(e.target.value)}
+      />
+      <button
+        onClick={()=>getAllPokemon(search)}
+        className="px-4 py-2 text-white bg-gray-900 cursor-pointer
+         rounded "
+      >
+        search
+      </button>
+      </div>
+      {searched &&
+       <div className="relative w-full
+       flex items-center justify-start flex-col gap-2 p-2 rounded bg-black/10 backdrop-blur shadow">
+        {searched?.name?(
+          <ShowPokemon pokemon={searched} image={searched.sprites.front_default}/>
+        ):<p className="text-sm text-gray-500">No pokemon found with that name</p>}
+        <X 
+        onClick={()=>setSearched(null)}
+        className="absolute text-red-600 cursor-pointer top-0 right-0"/>
+      </div>}
+    </div> */}
   </div>
   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
     {dataToBeRendered()?.map((pokemon: any) => {

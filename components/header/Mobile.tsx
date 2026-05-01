@@ -3,6 +3,7 @@ import { Loader2, LogInIcon, LogOut, Menu, X } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
+import SearchPokemon from "../mainData/search";
 type Props={
     favoritesCount:number,
     setLogin:(bool:boolean)=>void
@@ -43,6 +44,7 @@ export default function Mobile({setLogin,favoritesCount}:Props) {
         Login
         <LogInIcon className="inline-block ms-1"/>
     </div>}
+    <SearchPokemon />
     </nav>
     </>
   )
