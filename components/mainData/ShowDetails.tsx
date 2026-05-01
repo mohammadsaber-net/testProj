@@ -1,7 +1,6 @@
 import { Divide, Heart, Loader2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import AddTofavorites from "./AddTofavorites"
-
 type Props={
     setOpenDetails:(details:string|null)=>void,
     openDetails:string|null
@@ -11,10 +10,17 @@ export default function ShowDetails({openDetails,setOpenDetails}:Props) {
     useEffect(() => {
       if (!openDetails) return;
       const getData = async () => {
-        const res = await fetch(`/api/pagination/${openDetails}`, {
+        let res = await fetch(`/api/pagination/${openDetails}`, {
           cache: "no-store",
         });
-        const data = await res.json();
+        let data = await res.json();
+        if(!res.ok) {
+           res = await fetch(`https://pokeapi.co/api/v2/pokemon/${openDetails}`, {
+            cache: "no-store",
+          });
+          data = await res.json();
+          data={data}
+        }
         setDetails(data.data);
       };
       getData();

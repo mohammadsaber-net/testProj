@@ -12,13 +12,13 @@ export async function GET(
       { cache: "no-store" }
     );
     if (!res.ok) {
-      return NextResponse.json({success:false, error: "Failed to fetch type" }, { status: 500 });
+      return NextResponse.json({success:false, message: "Failed to fetch type" }, { status: res.status });
     }
     const data = await res.json();
     return NextResponse.json(
       { success: true, data: data.pokemon.map((p: any) => p.pokemon) }
     );
   } catch (err) {
-    return NextResponse.json({success: false, error: (err as Error).message}, { status: 500 });
+    return NextResponse.json({success: false, message: (err as Error).message}, { status: 500 });
   }
 }

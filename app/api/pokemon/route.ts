@@ -7,7 +7,7 @@ export async function GET(req:NextRequest) {
     );
     if (!res.ok) {
       return NextResponse.json(
-        { success: false, status: res.status },
+        { success: false, message:"Failed to fetch Pokémon data" },
         { status: res.status }
       );
     }

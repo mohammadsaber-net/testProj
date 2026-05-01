@@ -13,10 +13,17 @@ export default function MainData (){
     const getAllPokemon = async () => {
     if (allPokemon) return;
     try {
-        const res = await fetch("/api/pokemon",
+        let res = await fetch("/api/pokemon",
         { cache: "no-store" });
-        const data = await res.json();
-        console.log("all pokemon", data.data.results);
+        let data = await res.json();
+        if(!res.ok || !data.success) {
+          res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1000", {
+            cache: "no-store",
+          });
+          data = await res.json();
+          data={data}
+        }
+        console.log("all pokemon", data)
         setAllPokemon(data.data.results);
     } catch (error) {
         toast.error("Failed to load search data");
@@ -30,22 +37,36 @@ export default function MainData (){
       setDataType(null);
       return;
     }
-    const res = await fetch(`/api/pokemon/${type}`, {
+    let res = await fetch(`/api/pokemon/${type}`, {
       cache: "no-store",
     });
-    const data = await res.json();
+    let data = await res.json();
+    if(!res.ok || !data.success) {
+      res = await fetch(`https://pokeapi.co/api/v2/type/${type}`, {
+        cache: "no-store",
+      });
+      data = await res.json();
+      data={data: data.pokemon.map((p: any) => p.pokemon)}
+    }
+    console.log("pokemon by type", data)
     setDataType(data.data);
   };
 const getData=  async () => {
   try {
     setLoading(true);
-    const res = await fetch(`/api/pagination?limit=20&offset=${page * 20}`, {
+    let res = await fetch(`/api/pagination?limit=20&offset=${page * 20}`, {
        cache: "no-store" ,
       });
-    if (!res.ok) {
-      toast.error(`HTTP error! status: ${res.status}`);
+    let data = await res.json();
+    if ((!res.ok || !data.success)) {
+      res = await fetch(
+        `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page * 20}`,
+        { cache: "no-store" }
+      );
+      data = await res.json();
+      data = { data };
     }
-    const data= await res.json();
+     console.log("pokemon by offset", data)
     setData(data.data.results);
     setNextData(!!data.data.next);
   } catch (err) {
@@ -56,17 +77,15 @@ const getData=  async () => {
   useEffect(()=>{
     getData()
   },[page])
-  const [dataToBeRendered, setDataToBeRendered] = useState<any[]>([]);
-  useEffect(()=>{
+  const dataToBeRendered=()=>{
      if(search) {
-      setDataToBeRendered(allPokemon?.filter((pokemon: any) => pokemon.name.toLowerCase().includes(search)));
+      return allPokemon?.filter((pokemon: any) => pokemon.name.toLowerCase().includes(search));
     } else if (dataType) {
-      setDataToBeRendered(dataType||[]);
+      return dataType||[];
     } else {
-      setDataToBeRendered(data||[]);
+      return data||[];
     }
-    console.log("dataToBeRendered", dataToBeRendered);
-  },[search, dataType, data, allPokemon])
+  }
   return loading?(
   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
   {[...Array(20)].map((_, i) => (
@@ -99,7 +118,7 @@ const getData=  async () => {
     />
   </div>
   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-    {dataToBeRendered?.map((pokemon: any) => {
+    {dataToBeRendered()?.map((pokemon: any) => {
       if (!pokemon?.url || !pokemon?.name) return null;
        const id = pokemon.url.split("/").filter(Boolean).pop(); 
        const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; 
