@@ -1,371 +1,147 @@
-// "use client"
-// import { useEffect, useState } from "react";
-// import ShowPokemon from "./ShowPokemon";
-// import toast from "react-hot-toast";
-// export default function MainData (){
-//     const [allPokemon, setAllPokemon] = useState<any>(null);
-//     const [data, setData] = useState<any>(null);
-//     const [dataType, setDataType] = useState<any>(null);
-//     const [search, setSearch] = useState("")
-//     const [loading,setLoading]=useState(true)
-//     const [page, setPage] = useState(0);
-//     const [nextData, setNextData] = useState(true)
-//     const getAllPokemon = async () => {
-//     if (allPokemon) return;
-//     try {
-//         let res = await fetch("/api/pokemon",
-//         { cache: "no-store" });
-//         let data = await res.json();
-//         if(!res.ok || !data.success) {
-//           res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1000", {
-//             cache: "no-store",
-//           });
-//           data = await res.json();
-//           data={data}
-//         }
-//         console.log("all pokemon", data)
-//         setAllPokemon(data.data.results);
-//     } catch (error) {
-//         toast.error("Failed to load search data");
-//     }
-//   };
-//   const getPokemonByType = async (type: string) => {
-//     if (!type) {
-//       setDataType(null);
-//       return;
-//     }
-//     let res = await fetch(`/api/pokemon/${type}`, {
-//       cache: "no-store",
-//     });
-//     let data = await res.json();
-//     if(!res.ok || !data.success) {
-//       res = await fetch(`https://pokeapi.co/api/v2/type/${type}`, {
-//         cache: "no-store",
-//       });
-//       data = await res.json();
-//       data={data: data.pokemon.map((p: any) => p.pokemon)}
-//     }
-//     console.log("pokemon by type", data)
-//     setDataType(data.data);
-//   };
-// const getData=  async () => {
-//   try {
-//     setLoading(true);
-//     let res = await fetch(`/api/pagination?limit=20&offset=${page * 20}`, {
-//        cache: "no-store" ,
-//       });
-//     let data = await res.json();
-//     if ((!res.ok || !data.success)) {
-//       res = await fetch(
-//         `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page * 20}`,
-//         { cache: "no-store" }
-//       );
-//       data = await res.json();
-//       data = { data };
-//     }
-//      console.log("pokemon by offset", data)
-//     setData(data.data.results);
-//     setNextData(!!data.data.next);
-//   } catch (err) {
-//     toast.error(`An error occurred while loading data: ${(err as Error).message}`);
-//   }
-//   setLoading(false);
-// }
-//   useEffect(()=>{
-//     getData()
-//   },[page])
-//   useEffect(() => {
-//     getAllPokemon();
-//   }, []);
-//   const dataToBeRendered=()=>{
-//      if(search) {
-//       return allPokemon?.filter((pokemon: any) => pokemon.name.toLowerCase().includes(search));
-//     } else if (dataType) {
-//       return dataType||[];
-//     } else {
-//       return data||[];
-//     }
-//   }
-//   return loading?(
-//   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-//   {[...Array(20)].map((_, i) => (
-//     <div
-//       key={i}
-//       className="rounded-xl p-4 shadow-md animate-pulse bg-white"
-//     >
-//       <div className="w-full h-32 bg-gray-200 rounded-lg mb-4" />
-//       <div className="h-4 w-2/3 bg-gray-200 rounded mb-2" />
-//     </div>
-//   ))}</section>
-//   ):(
-//   <>
-//    <div className="my-2 flex justify-between gap-4 flex-col md:flex-row md:items-center">
-//     <select
-//       onChange={(e) => getPokemonByType(e.target.value)}
-//       className="mb-4 p-2.5 border border-gray-300 rounded w-full text-indigo-600 outline-none text-base"
-//     > 
-//       <option value="">All</option>
-//       <option value="Fire">Fire</option>
-//       <option value="Water">Water</option>
-//       <option value="Grass">Grass</option>
-//     </select>
-//     <input 
-//     type="text"
-//     value={search}
-//     placeholder="search by name"
-//     className="mb-4 p-2 border border-gray-300 rounded w-full text-indigo-600 outline-none text-base"
-//     onChange={(e)=> setSearch(e.target.value.toLowerCase())}
-//     />
-//   </div>
-//   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-//     {dataToBeRendered()?.map((pokemon: any) => {
-//       if (!pokemon?.url || !pokemon?.name) return null;
-//        const id = pokemon.url.split("/").filter(Boolean).pop(); 
-//        const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; 
-//        return(<ShowPokemon key={pokemon.name} pokemon={pokemon} image={image} />)
-//      })}
-//     </section>
-//     <div className="flex justify-center items-center gap-4 mt-6">
-//         <button
-//           onClick={() => {setPage((prev) => prev - 1);
-//             window.scrollTo({ top: 0, behavior: "smooth" })
-//           }}
-//           disabled={page === 0 || loading}
-//           className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-//         >
-//           Previous
-//         </button>
-//         <span className="font-bold">Page {page + 1}</span>
-//         <button
-//           onClick={() => {setPage((prev) => prev + 1);
-//             window.scrollTo({ top: 0, behavior: "smooth" })
-//           }}
-//           disabled={!nextData || loading}
-//           className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
-//         >
-//           Next
-//         </button>
-//       </div>
-//     </>
-//   )
-// }
-"use client";
-
-import { useEffect, useState, useRef } from "react";
+"use client"
+import { useEffect, useState } from "react";
 import ShowPokemon from "./ShowPokemon";
 import toast from "react-hot-toast";
-
-export default function MainData() {
-  const [allPokemon, setAllPokemon] = useState<any>(null);
-  const [data, setData] = useState<any>(null);
-  const [dataType, setDataType] = useState<any>(null);
-  const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(0);
-  const [nextData, setNextData] = useState(true);
-
-  const requestLock = useRef(false);
-
-  // ===================== GET ALL POKEMON =====================
-  const getAllPokemon = async () => {
+export default function MainData (){
+    const [allPokemon, setAllPokemon] = useState<any>(null);
+    const [data, setData] = useState<any>(null);
+    const [dataType, setDataType] = useState<any>(null);
+    const [search, setSearch] = useState("")
+    const [loading,setLoading]=useState(true)
+    const [page, setPage] = useState(0);
+    const [nextData, setNextData] = useState(true)
+    const getAllPokemon = async () => {
     if (allPokemon) return;
-    if (requestLock.current) return;
-
-    requestLock.current = true;
-
     try {
-      let res = await fetch("/api/pokemon", { cache: "no-store" });
-      let data = await res.json();
-
-      if (!res.ok || !data.success) {
-        res = await fetch(
-          "https://pokeapi.co/api/v2/pokemon?limit=1000",
-          { cache: "no-store" }
-        );
-        data = await res.json();
-        data = { data };
-      }
-
-      setAllPokemon(data?.data?.results || []);
+        let res = await fetch("/api/pokemon",
+        { cache: "no-store" });
+        let data = await res.json();
+        if(!res.ok || !data.success) {
+          res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1000", {
+            cache: "no-store",
+          });
+          data = await res.json();
+          data={data}
+        }
+        console.log("all pokemon", data)
+        setAllPokemon(data.data.results);
     } catch (error) {
-      toast.error("Failed to load search data");
-    } finally {
-      requestLock.current = false;
+        toast.error("Failed to load search data");
     }
   };
-
-  // ===================== GET BY TYPE =====================
   const getPokemonByType = async (type: string) => {
     if (!type) {
       setDataType(null);
       return;
     }
-
-    if (requestLock.current) return;
-    requestLock.current = true;
-
-    try {
-      let res = await fetch(`/api/pokemon/${type}`, {
+    let res = await fetch(`/api/pokemon/${type}`, {
+      cache: "no-store",
+    });
+    let data = await res.json();
+    if(!res.ok || !data.success) {
+      res = await fetch(`https://pokeapi.co/api/v2/type/${type}`, {
         cache: "no-store",
       });
-
-      let data = await res.json();
-
-      if (!res.ok || !data.success) {
-        res = await fetch(
-          `https://pokeapi.co/api/v2/type/${type}`,
-          { cache: "no-store" }
-        );
-
-        data = await res.json();
-
-        data = {
-          data: data.pokemon.map((p: any) => p.pokemon),
-        };
-      }
-
-      setDataType(data?.data || []);
-    } catch (error) {
-      toast.error("Failed to load type data");
-    } finally {
-      requestLock.current = false;
+      data = await res.json();
+      data={data: data.pokemon.map((p: any) => p.pokemon)}
     }
+    console.log("pokemon by type", data)
+    setDataType(data.data);
   };
-
-  // ===================== PAGINATION =====================
-  const getData = async () => {
-    if (requestLock.current) return;
-    requestLock.current = true;
-
-    try {
-      setLoading(true);
-
-      let res = await fetch(
-        `/api/pagination?limit=20&offset=${page * 20}`,
+const getData=  async () => {
+  try {
+    setLoading(true);
+    let res = await fetch(`/api/pagination?limit=20&offset=${page * 20}`, {
+       cache: "no-store" ,
+      });
+    let data = await res.json();
+    if ((!res.ok || !data.success)) {
+      res = await fetch(
+        `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page * 20}`,
         { cache: "no-store" }
       );
-
-      let data = await res.json();
-
-      if (!res.ok || !data.success) {
-        res = await fetch(
-          `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page * 20}`,
-          { cache: "no-store" }
-        );
-
-        data = await res.json();
-        data = { data };
-      }
-
-      setData(data?.data?.results || []);
-      setNextData(!!data?.data?.next);
-    } catch (err) {
-      toast.error(
-        `An error occurred while loading data: ${(err as Error).message}`
-      );
-    } finally {
-      setLoading(false);
-      requestLock.current = false;
+      data = await res.json();
+      data = { data };
     }
-  };
-
-  // ===================== EFFECTS =====================
-  useEffect(() => {
-    getData();
-  }, [page]);
-
+     console.log("pokemon by offset", data)
+    setData(data.data.results);
+    setNextData(!!data.data.next);
+  } catch (err) {
+    toast.error(`An error occurred while loading data: ${(err as Error).message}`);
+  }
+  setLoading(false);
+}
+  useEffect(()=>{
+    getData()
+  },[page])
   useEffect(() => {
     getAllPokemon();
   }, []);
-
-  // ===================== RENDER DATA =====================
-  const dataToBeRendered = () => {
-    if (search) {
-      return (
-        allPokemon?.filter((pokemon: any) =>
-          pokemon?.name?.toLowerCase().includes(search)
-        ) || []
-      );
+  const dataToBeRendered=()=>{
+     if(search) {
+      return allPokemon?.filter(
+        (pokemon: any) => 
+          pokemon.name.toLowerCase().includes(search.toLowerCase()) 
+        || []);
     } else if (dataType) {
-      return dataType || [];
+      return dataType||[];
     } else {
-      return data || [];
+      return data||[];
     }
-  };
-
-  // ===================== LOADING =====================
-  return loading ? (
-    <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-      {[...Array(20)].map((_, i) => (
-        <div
-          key={i}
-          className="rounded-xl p-4 shadow-md animate-pulse bg-white"
-        >
-          <div className="w-full h-32 bg-gray-200 rounded-lg mb-4" />
-          <div className="h-4 w-2/3 bg-gray-200 rounded mb-2" />
-        </div>
-      ))}
+  }
+  return loading?(
+  <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+  {[...Array(20)].map((_, i) => (
+    <div
+      key={i}
+      className="rounded-xl p-4 shadow-md animate-pulse bg-white"
+    >
+      <div className="w-full h-32 bg-gray-200 rounded-lg mb-4" />
+      <div className="h-4 w-2/3 bg-gray-200 rounded mb-2" />
+    </div>
+  ))}</section>
+  ):(
+  <>
+   <div className="my-2 flex justify-between gap-4 flex-col md:flex-row md:items-center">
+    <select
+      onChange={(e) => getPokemonByType(e.target.value)}
+      className="mb-4 p-2.5 border border-gray-300 rounded w-full text-indigo-600 outline-none text-base"
+    > 
+      <option value="">All</option>
+      <option value="Fire">Fire</option>
+      <option value="Water">Water</option>
+      <option value="Grass">Grass</option>
+    </select>
+    <input 
+    type="text"
+    value={search}
+    placeholder="search by name"
+    className="mb-4 p-2 border border-gray-300 rounded w-full text-indigo-600 outline-none text-base"
+    onChange={(e)=> setSearch(e.target.value)}
+    />
+  </div>
+  <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+    {dataToBeRendered()?.map((pokemon: any) => {
+      if (!pokemon?.url || !pokemon?.name) return null;
+       const id = pokemon.url.split("/").filter(Boolean).pop(); 
+       const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; 
+       return(<ShowPokemon key={pokemon.name} pokemon={pokemon} image={image} />)
+     })}
     </section>
-  ) : (
-    <>
-      {/* FILTERS */}
-      <div className="my-2 flex justify-between gap-4 flex-col md:flex-row md:items-center">
-        <select
-          onChange={(e) => getPokemonByType(e.target.value)}
-          className="mb-4 p-2.5 border border-gray-300 rounded w-full text-indigo-600 outline-none text-base"
-        >
-          <option value="">All</option>
-          <option value="Fire">Fire</option>
-          <option value="Water">Water</option>
-          <option value="Grass">Grass</option>
-        </select>
-
-        <input
-          type="text"
-          value={search}
-          placeholder="search by name"
-          className="mb-4 p-2 border border-gray-300 rounded w-full text-indigo-600 outline-none text-base"
-          onChange={(e) => setSearch(e.target.value.toLowerCase())}
-        />
-      </div>
-
-      {/* LIST */}
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-        {dataToBeRendered()?.map((pokemon: any) => {
-          if (!pokemon?.url || !pokemon?.name) return null;
-
-          const id = pokemon.url.split("/").filter(Boolean).pop();
-          const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
-
-          return (
-            <ShowPokemon
-              key={pokemon.name}
-              pokemon={pokemon}
-              image={image}
-            />
-          );
-        })}
-      </section>
-
-      {/* PAGINATION */}
-      <div className="flex justify-center items-center gap-4 mt-6">
+    <div className="flex justify-center items-center gap-4 mt-6">
         <button
-          onClick={() => {
-            setPage((prev) => prev - 1);
-            window.scrollTo({ top: 0, behavior: "smooth" });
+          onClick={() => {setPage((prev) => prev - 1);
+            window.scrollTo({ top: 0, behavior: "smooth" })
           }}
           disabled={page === 0 || loading}
           className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
         >
           Previous
         </button>
-
         <span className="font-bold">Page {page + 1}</span>
-
         <button
-          onClick={() => {
-            setPage((prev) => prev + 1);
-            window.scrollTo({ top: 0, behavior: "smooth" });
+          onClick={() => {setPage((prev) => prev + 1);
+            window.scrollTo({ top: 0, behavior: "smooth" })
           }}
           disabled={!nextData || loading}
           className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
@@ -374,5 +150,5 @@ export default function MainData() {
         </button>
       </div>
     </>
-  );
+  )
 }
