@@ -29,9 +29,6 @@ export default function MainData (){
         toast.error("Failed to load search data");
     }
   };
-  useEffect(() => {
-    getAllPokemon();
-  }, []);
   const getPokemonByType = async (type: string) => {
     if (!type) {
       setDataType(null);
@@ -77,6 +74,9 @@ const getData=  async () => {
   useEffect(()=>{
     getData()
   },[page])
+  useEffect(() => {
+    getAllPokemon();
+  }, []);
   const dataToBeRendered=()=>{
      if(search) {
       return allPokemon?.filter((pokemon: any) => pokemon.name.toLowerCase().includes(search));
