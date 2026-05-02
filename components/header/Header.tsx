@@ -27,6 +27,7 @@ export default function Header() {
       <Link href='/' className='font-bold text-xl md:text-2xl'>
         PokeDex
       </Link>
+     <div className="flex items-center gap-4 sm:gap-6">
       <nav className='md:flex items-center hidden gap-4'>
         {/*  */}
         <Link href={"/"} className='mx-2 hover:underline'>
@@ -50,11 +51,11 @@ export default function Header() {
           Login
           <LogInIcon className="inline-block ms-1"/>
         </div>}
-        <SearchPokemon />
       </nav>
+      <SearchPokemon />
       <Mobile setLogin={setLogin} favoritesCount={favoritesCount} />
+      </div>
       <Login login={login} setLogin={setLogin} />
-      {/* <div className="hidden md-block"><SearchPokemon /></div> */}
     </header>
   )
 }

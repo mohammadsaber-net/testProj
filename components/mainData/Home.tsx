@@ -3,48 +3,34 @@ import { useEffect, useState } from "react";
 import ShowPokemon from "./ShowPokemon";
 import toast from "react-hot-toast";
 import { X } from "lucide-react";
-import SearchPokemon from "./search";
 export default function MainData (){
     // const [allPokemon, setAllPokemon] = useState<any>(null);
-    const [searched, setSearched] = useState<any>(null);
     const [data, setData] = useState<any>(null);
     const [dataType, setDataType] = useState<any>(null);
-    const [search, setSearch] = useState("")
+    // const [search, setSearch] = useState("")
     const [loading,setLoading]=useState(true)
     const [page, setPage] = useState(0);
     const [nextData, setNextData] = useState(true)
-    const getAllPokemon = async (name:string) => {
-    // if (allPokemon) return;
-    try {
-       let res = await fetch(`/api/pagination/${name}`, {
-          cache: "no-store",
-        });
-        let data = await res.json();
-        if(!res.ok) {
-           res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`, {
-            cache: "no-store",
-          });
-          data = await res.json();
-          data={data}
-        }
-        // let res = await fetch("/api/pokemon",
-        // { cache: "no-store" });
-        // let data = await res.json();
-        // if(!res.ok || !data.success) {
-        //   // res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1000", {
-        //   res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`,{  
-        //   cache: "no-store",
-        //   });
-        //   data = await res.json();
-        //   data={data}
-        // }
-        // console.log("all pokemon", data)
-        setSearched(data.data);
-        // setAllPokemon(data.data.results);
-    } catch (error) {
-        toast.error("Failed to load search data");
-    }
-  };
+  //   const getAllPokemon = async () => {
+  //     try{
+  //       if (allPokemon) return;
+  //       let res = await fetch("/api/pokemon",
+  //       { cache: "no-store" });
+  //       let data = await res.json();
+  //       if(!res.ok || !data.success) {
+  //         res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1000", {
+  //         // res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`,{  
+  //         cache: "no-store",
+  //         });
+  //         data = await res.json();
+  //         data={data}
+  //       }
+  //       console.log("all pokemon", data)
+  //       setAllPokemon(data.data.results);
+  //   } catch (error) {
+  //       toast.error("Failed to load search data");
+  //   }
+  // }
   const getPokemonByType = async (type: string) => {
     if (!type) {
       setDataType(null);
@@ -90,17 +76,15 @@ const getData=  async () => {
   useEffect(()=>{
     getData()
   },[page])
-  // useEffect(() => {
-  //   getAllPokemon();
-  // }, []);
+  
   const dataToBeRendered=()=>{
     // if(search) {
     //   return allPokemon?.filter(
     //     (pokemon: any) => 
     //       pokemon.name.toLowerCase().includes(search.toLowerCase()) 
     //     || []);
-    // } else  
-    if (dataType) {
+    // } else 
+      if (dataType) {
       return dataType||[];
     } else {
       return data||[];
@@ -140,7 +124,7 @@ const getData=  async () => {
         onChange={(e)=> setSearch(e.target.value)}
       />
       <button
-        onClick={()=>getAllPokemon(search)}
+        onClick={()=>getAllPokemon()}
         className="px-4 py-2 text-white bg-gray-900 cursor-pointer
          rounded "
       >

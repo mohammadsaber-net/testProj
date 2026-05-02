@@ -44,7 +44,6 @@ export default function Mobile({setLogin,favoritesCount}:Props) {
         Login
         <LogInIcon className="inline-block ms-1"/>
     </div>}
-    <SearchPokemon />
     </nav>
     </>
   )
