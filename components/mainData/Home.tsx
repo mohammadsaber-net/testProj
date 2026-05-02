@@ -149,12 +149,35 @@ const getData=  async () => {
     </div> */}
   </div>
   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-    {dataType?.map((pokemon: any) => {
+    {/* {dataType?.map((pokemon: any) => {
       if (!pokemon?.url || !pokemon?.name) return null;
        const id = pokemon.url.split("/").filter(Boolean).pop(); 
        const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; 
        return(<ShowPokemon key={pokemon.name} pokemon={pokemon} image={image} />)
-     })}
+     })} */}
+     {Array.isArray(dataType) &&
+  dataType.map((pokemon: any) => {
+
+    if (!pokemon) return null;
+
+    const url = pokemon?.url;
+    const name = pokemon?.name;
+
+    if (typeof url !== "string" || !name) return null;
+
+    const id = url.split("/").filter(Boolean).pop();
+    if (!id) return null;
+
+    const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+
+    return (
+      <ShowPokemon
+        key={name}
+        pokemon={pokemon}
+        image={image}
+      />
+    );
+  })}
     </section>
     <div className="flex justify-center items-center gap-4 mt-6">
         <button
