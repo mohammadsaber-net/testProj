@@ -40,6 +40,7 @@ export default function MainData (){
       cache: "no-store",
     });
     let data = await res.json();
+    type = "WATER"
     if(!res.ok || !data.success) {
       res = await fetch(`https://pokeapi.co/api/v2/type/${type}`, {
         cache: "no-store",
@@ -76,6 +77,9 @@ const getData=  async () => {
   useEffect(()=>{
     getData()
   },[page])
+  useEffect(()=>{
+    getPokemonByType("WATER")
+  },[])
   
   const dataToBeRendered=()=>{
     // if(search) {
@@ -86,7 +90,8 @@ const getData=  async () => {
     // } else 
       if (dataType) {
       return dataType||[];
-    } else {
+    } 
+    else {
       return data||[];
     }
   }
@@ -144,7 +149,7 @@ const getData=  async () => {
     </div> */}
   </div>
   <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-    {dataToBeRendered()?.map((pokemon: any) => {
+    {dataType?.map((pokemon: any) => {
       if (!pokemon?.url || !pokemon?.name) return null;
        const id = pokemon.url.split("/").filter(Boolean).pop(); 
        const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; 

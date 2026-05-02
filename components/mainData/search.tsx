@@ -42,8 +42,8 @@ export default function SearchPokemon() {
       />
       <button
         onClick={()=>getAllPokemon(search)}
-        className="px-2 py-1.5 text-white bg-gray-900 cursor-pointer
-         rounded md:-ms-14 -ms-12 active:bg-gray-700 hover:bg-gray-700 transition-colors duration-300 text-xs md:text-md"
+        className="px-1 py-1.5 text-white bg-gray-900 cursor-pointer
+         rounded md:-ms-14 -ms-8 active:bg-gray-700 hover:bg-gray-700 transition-colors duration-300 text-xs md:text-md"
       >
         search
       </button>
